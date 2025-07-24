@@ -1,13 +1,23 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
 
+#define VERSION "0.1.0"
+#define BUFFER_SIZE 1000
 
-int main() {
-    printf("hello\n");
+// create json response
+void create_health_response(char* buffer) {
+    snprintf(
+        buffer,
+        BUFFER_SIZE,
+        "{\"language\": \"c\", \"version\": \"%s\"}",
+        VERSION
+    );
 }
 
+int main() {
+    char buffer[BUFFER_SIZE];
+
+    create_health_response(buffer);
+    printf("health response: %s\n", buffer);
+
+    return 0;
+}
