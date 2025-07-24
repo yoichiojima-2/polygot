@@ -13,7 +13,6 @@ void test_create_health_response() {
 }
 
 int main() {
-  char buffer[BUFFER_SIZE];
   test_create_health_response();
   return 0;
 }
