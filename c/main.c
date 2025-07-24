@@ -11,15 +11,6 @@ void create_health_response(char *buffer) {
            VERSION);
 }
 
-int main() {
-  char buffer[BUFFER_SIZE];
-
-  create_health_response(buffer);
-  printf("health response: %s\n", buffer);
-
-  return 0;
-}
-
 void test_create_health_response() {
   char buffer[BUFFER_SIZE];
   create_health_response(buffer);
@@ -28,4 +19,25 @@ void test_create_health_response() {
   } else {
     printf("test_create_health_response: FAILED\n");
   }
+}
+
+int test() {
+  printf("testing...\n");
+  test_create_health_response();
+  printf("done all tests\n");
+  return 0;
+}
+
+int main(int argc, char *argv[]) {
+  if (argc > 1 && strcmp(argv[1], "test") == 0) {
+    test();
+    return 0;
+  }
+
+  char buffer[BUFFER_SIZE];
+
+  create_health_response(buffer);
+  printf("health response: %s\n", buffer);
+
+  return 0;
 }
