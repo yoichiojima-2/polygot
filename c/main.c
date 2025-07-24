@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#define FUNCTIONS_H
-
 #define VERSION "0.1.0"
 #define BUFFER_SIZE 1000
 
