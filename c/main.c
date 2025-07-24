@@ -1,4 +1,5 @@
-#include "main.h"
+#include <stdio.h>
+#include "functions.h"
 
 int main() {
   char buffer[BUFFER_SIZE];
