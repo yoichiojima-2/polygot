@@ -34,6 +34,11 @@ void create_health_response(char *buffer) {
            VERSION);
 }
 
+void create_time_response(char *buffer) {
+  snprintf(buffer, BUFFER_SIZE, "{\"servers\": \"c\", \"version\': %s}",
+           VERSION);
+}
+
 // tests
 void test_create_http_response() {
   char json_body[BUFFER_SIZE];
@@ -87,4 +92,4 @@ int main(int argc, char *argv[]) {
   printf("http response: %s\n", http_response);
 
   return 0;
-}
+};
