@@ -4,71 +4,70 @@
 #define VERSION "0.1.0"
 #define BUFFER_SIZE 1000
 
-// functions
-void create_http_response(const char *json_body, char *buffer) {
+// responses
+void create_http_response_with_status(char *buffer, const char *status_list,
+                                      const char *body) {
   snprintf(buffer, BUFFER_SIZE,
-           "HTTP/1.1 200 OK\r\n"
+           "HTTP/1.1 %s\r\n"
            "Content-Type: application/json\r\n"
            "Content-Length: %zu\r\n"
            "Access-Control-Allow-Origin: *\r\n"
            "Connection: close\r\n"
            "\r\n"
            "%s",
-           strlen(json_body), json_body);
+           status_list, strlen(body), body);
+}
+
+void create_http_response(char *buffer, char *body) {
+  create_http_response_with_status(buffer, "200 OK", body);
 }
 
 void create_404_response(char *buffer) {
-  const char *body = "{\"error\": \"not found\"}";
-  snprintf(buffer, BUFFER_SIZE,
-           "HTTP/1.1 404 Not Found\r\n"
-           "Content-Type: application/json\r\n"
-           "Content-Length: %zu\r\n"
-           "Connection: close\r\n"
-           "\r\n"
-           "%s\r\n",
-           strlen(body), body);
+  create_http_response_with_status(buffer, "404 Not Found", "{\"error\": \"not found\"}");
 }
 
 void create_health_response(char *buffer) {
-  snprintf(buffer, BUFFER_SIZE, "{\"language\": \"c\", \"version\": \"%s\"}",
+  char body[BUFFER_SIZE];
+  snprintf(body, BUFFER_SIZE, "{\"language\": \"c\", \"version\": \"%s\"}",
            VERSION);
-}
-
-void create_time_response(char *buffer) {
-  snprintf(buffer, BUFFER_SIZE, "{\"servers\": \"c\", \"version\': %s}",
-           VERSION);
+  create_http_response_with_status(buffer, "200 OK", body);
 }
 
 // tests
 void test_create_http_response() {
-  char json_body[BUFFER_SIZE];
-  create_health_response(json_body);
-
-  char http_response[BUFFER_SIZE];
   printf("test_create_http_response\n");
-  create_http_response(json_body, http_response);
-  printf("http response: %s\n", http_response);
-  printf("\n");
+  printf("============================================================\n");
+
+  char body[BUFFER_SIZE];
+  create_health_response(body);
+  char buffer[BUFFER_SIZE];
+  create_http_response(buffer, body);
+
+  printf("http response: %s\n\n", buffer);
 }
 
 void test_create_404_response() {
   printf("test_create_404_response\n");
+  printf("============================================================\n");
+
   char buffer[BUFFER_SIZE];
   create_404_response(buffer);
-  printf("404 response: %s\n", buffer);
-  printf("\n");
+
+  printf("404 response: %s\n\n", buffer);
 }
 
 void test_create_health_response() {
   printf("test_create_health_response\n");
+  printf("============================================================\n");
+
   char buffer[BUFFER_SIZE];
   create_health_response(buffer);
-  printf("health response: %s\n", buffer);
-  printf("\n");
+
+  printf("health response: %s\n\n", buffer);
 }
 
 int test() {
-  printf("testing...\n");
+  printf("testing...\n\n");
   test_create_health_response();
   test_create_http_response();
   test_create_404_response();
@@ -76,20 +75,17 @@ int test() {
   return 0;
 }
 
-// main
+// entrypoint
 int main(int argc, char *argv[]) {
   if (argc > 1 && strcmp(argv[1], "test") == 0) {
     test();
     return 0;
   }
-
-  char json_body[BUFFER_SIZE];
-  char http_response[BUFFER_SIZE];
-
-  create_health_response(json_body);
-  create_http_response(json_body, http_response);
-
-  printf("http response: %s\n", http_response);
-
+  char body[BUFFER_SIZE];
+  char buffer[BUFFER_SIZE];
+  create_health_response(body);
+  create_http_response(buffer, body);
+  printf("http response: %s\n", buffer);
   return 0;
 };
+
