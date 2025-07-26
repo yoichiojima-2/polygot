@@ -4,7 +4,6 @@
 #define VERSION "0.1.0"
 #define BUFFER_SIZE 1000
 
-// responses
 void create_http_response_with_status(char *buffer, const char *status_list,
                                       const char *body) {
   snprintf(buffer, BUFFER_SIZE,
@@ -33,54 +32,7 @@ void create_health_response(char *buffer) {
   create_http_response_with_status(buffer, "200 OK", body);
 }
 
-// tests
-void test_create_http_response() {
-  printf("test_create_http_response\n");
-  printf("============================================================\n");
-
-  char body[BUFFER_SIZE];
-  create_health_response(body);
-  char buffer[BUFFER_SIZE];
-  create_http_response(buffer, body);
-
-  printf("http response: %s\n\n", buffer);
-}
-
-void test_create_404_response() {
-  printf("test_create_404_response\n");
-  printf("============================================================\n");
-
-  char buffer[BUFFER_SIZE];
-  create_404_response(buffer);
-
-  printf("404 response: %s\n\n", buffer);
-}
-
-void test_create_health_response() {
-  printf("test_create_health_response\n");
-  printf("============================================================\n");
-
-  char buffer[BUFFER_SIZE];
-  create_health_response(buffer);
-
-  printf("health response: %s\n\n", buffer);
-}
-
-int test() {
-  printf("testing...\n\n");
-  test_create_health_response();
-  test_create_http_response();
-  test_create_404_response();
-  printf("done all tests\n");
-  return 0;
-}
-
-// entrypoint
 int main(int argc, char *argv[]) {
-  if (argc > 1 && strcmp(argv[1], "test") == 0) {
-    test();
-    return 0;
-  }
   char body[BUFFER_SIZE];
   char buffer[BUFFER_SIZE];
   create_health_response(body);
