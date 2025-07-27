@@ -3,6 +3,8 @@
 
 #define VERSION "0.1.0"
 #define BUFFER_SIZE 1000
+#define HTTP_200 "200 OK\r\n"
+#define HTTP_404 "404 Not Found\r\n"
 
 void create_http_response_with_status(char *buffer, const char *status_list,
                                       const char *body) {
@@ -18,18 +20,18 @@ void create_http_response_with_status(char *buffer, const char *status_list,
 }
 
 void create_http_response(char *buffer, char *body) {
-  create_http_response_with_status(buffer, "200 OK", body);
+  create_http_response_with_status(buffer, HTTP_200, body);
 }
 
 void create_404_response(char *buffer) {
-  create_http_response_with_status(buffer, "404 Not Found", "{\"error\": \"not found\"}");
+  create_http_response_with_status(buffer, HTTP_404, "{\"error\": \"not found\"}");
 }
 
 void create_health_response(char *buffer) {
   char body[BUFFER_SIZE];
   snprintf(body, BUFFER_SIZE, "{\"language\": \"c\", \"version\": \"%s\"}",
            VERSION);
-  create_http_response_with_status(buffer, "200 OK", body);
+  create_http_response_with_status(buffer, HTTP_200, body);
 }
 
 int main(int argc, char *argv[]) {
