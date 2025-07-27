@@ -54,5 +54,54 @@ int main(int argc, char *argv[]) {
     extern int test();
     return test();
   }
+
+  int server_socket = create_socket();
+  struct sockaddr_in server_addr;
+  server_addr.sin_family = AF_INET;
+  server_addr.sin_addr.s_addr = INADDR_ANY;
+  server_addr.sin_port = htons(PORT);
+
+  if (bind(server_socket, (struct sockaddr *)&server_addr,
+           sizeof(server_addr)) < 0) {
+    perror("bind failed");
+    close(server_socket);
+    exit(EXIT_FAILURE);
+  }
+
+  if (listen(server_socket, 3) < 0) {
+    perror("listen failed");
+    close(server_socket);
+    exit(EXIT_FAILURE);
+  }
+
+  printf("server running on port %d\n", PORT);
+
+  while (1) {
+    struct sockaddr_in client_addr;
+    socklen_t client_addr_len = sizeof(client_addr);
+    int client_socket = accept(server_socket, (struct sockaddr *)&client_addr,
+                               &client_addr_len);
+
+    if (client_socket < 0) {
+      perror("accept failed");
+      continue;
+    }
+
+    char buffer[BUFFER_SIZE] = {0};
+    char response[BUFFER_SIZE] = {0};
+
+    read(client_socket, buffer, BUFFER_SIZE);
+
+    if (strstr(buffer, "GET /health") != NULL) {
+      create_health_response(response);
+    } else {
+      create_404_response(response);
+    }
+
+    write(client_socket, response, strlen(response));
+    close(client_socket);
+  }
+
+  close(server_socket);
   return 0;
 }
