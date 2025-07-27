@@ -3,6 +3,7 @@
 
 #define BUFFER_SIZE 1024
 
+extern void create_socket();
 extern void create_http_response(char *buffer, char *body);
 extern void create_404_response(char *buffer);
 extern void create_health_response(char *buffer);
