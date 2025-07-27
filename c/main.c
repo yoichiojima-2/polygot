@@ -40,7 +40,8 @@ void create_http_response(char *buffer, char *body) {
 }
 
 void create_404_response(char *buffer) {
-  create_http_response_with_status(buffer, HTTP_404, "{\"error\": \"not found\"}");
+  create_http_response_with_status(buffer, HTTP_404,
+                                   "{\"error\": \"not found\"}");
 }
 
 void create_health_response(char *buffer) {
