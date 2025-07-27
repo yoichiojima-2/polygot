@@ -49,36 +49,58 @@ void create_health_response(char *buffer) {
   add_http_headers(buffer, HTTP_200, body);
 }
 
-int main(int argc, char *argv[]) {
-  if (argc > 1 && strcmp(argv[1], "test") == 0) {
-    extern int test();
-    return test();
-  }
-
-  int server_socket = create_socket();
+struct sockaddr_in create_server_addr() {
   struct sockaddr_in server_addr;
   server_addr.sin_family = AF_INET;
   server_addr.sin_addr.s_addr = INADDR_ANY;
   server_addr.sin_port = htons(PORT);
+  return server_addr;
+}
 
-  if (bind(server_socket, (struct sockaddr *)&server_addr,
-           sizeof(server_addr)) < 0) {
+void bind_socket(int server_socket, struct sockaddr_in *server_addr) {
+  if (bind(server_socket, (struct sockaddr *)server_addr,
+           sizeof(*server_addr)) < 0) {
     perror("bind failed");
     close(server_socket);
     exit(EXIT_FAILURE);
   }
+}
 
+void listen_socket(int server_socket) {
   if (listen(server_socket, 3) < 0) {
     perror("listen failed");
     close(server_socket);
     exit(EXIT_FAILURE);
   }
+}
 
+void handle_client(int client_socket) {
+  char buffer[BUFFER_SIZE] = {0};
+  char response[BUFFER_SIZE] = {0};
+
+  read(client_socket, buffer, BUFFER_SIZE);
+
+  if (strstr(buffer, "GET /health") != NULL) {
+    create_health_response(response);
+  } else {
+    create_404_response(response);
+  }
+
+  write(client_socket, response, strlen(response));
+  close(client_socket);
+}
+
+void serve() {
+  int server_socket = create_socket();
+  struct sockaddr_in server_addr = create_server_addr();
+  bind_socket(server_socket, &server_addr);
+  listen_socket(server_socket);
   printf("server running on port %d\n", PORT);
 
   while (1) {
     struct sockaddr_in client_addr;
     socklen_t client_addr_len = sizeof(client_addr);
+
     int client_socket = accept(server_socket, (struct sockaddr *)&client_addr,
                                &client_addr_len);
 
@@ -87,21 +109,17 @@ int main(int argc, char *argv[]) {
       continue;
     }
 
-    char buffer[BUFFER_SIZE] = {0};
-    char response[BUFFER_SIZE] = {0};
-
-    read(client_socket, buffer, BUFFER_SIZE);
-
-    if (strstr(buffer, "GET /health") != NULL) {
-      create_health_response(response);
-    } else {
-      create_404_response(response);
-    }
-
-    write(client_socket, response, strlen(response));
-    close(client_socket);
+    handle_client(client_socket);
   }
 
   close(server_socket);
+}
+
+int main(int argc, char *argv[]) {
+  if (argc > 1 && strcmp(argv[1], "test") == 0) {
+    extern int test();
+    return test();
+  }
+  serve();
   return 0;
 }
