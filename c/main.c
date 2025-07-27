@@ -22,8 +22,7 @@ int create_socket() {
   return server_socket;
 }
 
-void create_http_response_with_status(char *buffer, const char *status_list,
-                                      const char *body) {
+void add_http_headers(char *buffer, const char *status_list, const char *body) {
   snprintf(buffer, BUFFER_SIZE,
            "HTTP/1.1 %s\r\n"
            "Content-Type: application/json\r\n"
@@ -36,19 +35,18 @@ void create_http_response_with_status(char *buffer, const char *status_list,
 }
 
 void create_http_response(char *buffer, char *body) {
-  create_http_response_with_status(buffer, HTTP_200, body);
+  add_http_headers(buffer, HTTP_200, body);
 }
 
 void create_404_response(char *buffer) {
-  create_http_response_with_status(buffer, HTTP_404,
-                                   "{\"error\": \"not found\"}");
+  add_http_headers(buffer, HTTP_404, "{\"error\": \"not found\"}");
 }
 
 void create_health_response(char *buffer) {
   char body[BUFFER_SIZE];
   snprintf(body, BUFFER_SIZE, "{\"language\": \"c\", \"version\": \"%s\"}",
            VERSION);
-  create_http_response_with_status(buffer, HTTP_200, body);
+  add_http_headers(buffer, HTTP_200, body);
 }
 
 int main(int argc, char *argv[]) {
