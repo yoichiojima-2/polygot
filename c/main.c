@@ -90,6 +90,14 @@ void handle_client(int client_socket) {
   close(client_socket);
 }
 
+int create_client_socket(int server_socket) {
+  struct sockaddr_in client_addr;
+  socklen_t client_addr_len = sizeof(client_addr);
+  int client_socket =
+      accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
+  return client_socket;
+}
+
 void serve() {
   int server_socket = create_socket();
   struct sockaddr_in server_addr = create_server_addr();
@@ -98,17 +106,11 @@ void serve() {
   printf("server running on port %d\n", PORT);
 
   while (1) {
-    struct sockaddr_in client_addr;
-    socklen_t client_addr_len = sizeof(client_addr);
-
-    int client_socket = accept(server_socket, (struct sockaddr *)&client_addr,
-                               &client_addr_len);
-
+    int client_socket = create_client_socket(server_socket);
     if (client_socket < 0) {
       perror("accept failed");
       continue;
     }
-
     handle_client(client_socket);
   }
 
