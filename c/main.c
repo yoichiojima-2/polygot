@@ -35,6 +35,11 @@ void create_health_response(char *buffer) {
 }
 
 int main(int argc, char *argv[]) {
+  if (argc > 1 && strcmp(argv[1], "test") == 0) {
+    extern int test();
+    return test();
+  }
+
   char body[BUFFER_SIZE];
   char buffer[BUFFER_SIZE];
   create_health_response(body);

@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#define BUFFER_SIZE 1024
+
 extern void create_http_response(char *buffer, char *body);
 extern void create_404_response(char *buffer);
 extern void create_health_response(char *buffer);
@@ -37,7 +39,7 @@ void test_create_health_response() {
   printf("health response: %s\n\n", buffer);
 }
 
-int main() {
+int test() {
   printf("testing...\n\n");
   test_create_health_response();
   test_create_http_response();
@@ -45,4 +47,3 @@ int main() {
   printf("done all tests\n");
   return 0;
 }
-
