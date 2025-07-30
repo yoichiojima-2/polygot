@@ -11,10 +11,14 @@ const health = (req, res) => {
   res.status(200).json(response);
 };
 
-const app = express();
+function main() {
+  const app = express();
 
-app.get("/health", health);
+  app.get("/health", health);
 
-app.listen(PORT, () => {
-  console.log(`server running on port ${PORT}`);
-});
+  app.listen(PORT, () => {
+    console.log(`server running on port ${PORT}`);
+  });
+}
+
+main();
