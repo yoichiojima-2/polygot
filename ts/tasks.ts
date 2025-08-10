@@ -19,6 +19,11 @@ export const getAllTasks = async (): Promise<Task[]> => {
   }
 };
 
+export const showAllTasks = async (): Promise<void> => {
+  const tasks = await getAllTasks();
+  console.log(tasks);
+};
+
 export const addColumn = async (
   table: string,
   name: string,
@@ -38,7 +43,9 @@ export const setTags = async (id: number, tags: string[]): Promise<void> => {
   const client = new Client(DB_CONFIG);
   try {
     await client.connect();
-    await client.query(`UPDATE tasks SET tags = ${tags} WHERE id = ${id}`);
+    await client.query(
+      `UPDATE tasks SET tags = '${JSON.stringify(tags)}' WHERE id = ${id}`,
+    );
   } catch (error) {
     console.error("error setting tags: ", error);
   } finally {
