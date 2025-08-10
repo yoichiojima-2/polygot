@@ -13,13 +13,13 @@ const DB_CONFIG = {
 };
 
 // query to postgres
-interface Task {
+export interface Task {
   id: number;
   title: string;
   due: Date;
 }
 
-const getAllTasks = async (): Promise<Task[]> => {
+export const getAllTasks = async (): Promise<Task[]> => {
   const client = new Client(DB_CONFIG);
   try {
     await client.connect();
@@ -29,14 +29,3 @@ const getAllTasks = async (): Promise<Task[]> => {
     await client.end();
   }
 };
-
-const main = async () => {
-  try {
-    const tasks = await getAllTasks();
-    console.log(tasks);
-  } catch (error) {
-    console.error("error fetching tasks:", error);
-  }
-};
-
-main();
