@@ -46,7 +46,7 @@ export const setTags = async (id: number, tags: string[]): Promise<void> => {
   try {
     await client.connect();
     await client.query(
-      `UPDATE tasks SET tags = '${JSON.stringify(tags)}' WHERE id = ${id}`,
+      `UPDATE ${TABLE_NAME} SET tags = '${JSON.stringify(tags)}' WHERE id = ${id}`,
     );
   } catch (error) {
     console.error("error setting tags: ", error);
