@@ -9,11 +9,6 @@ interface HealthResponse {
   version: string;
 }
 
-interface TasksResponse {
-  tasks: Task[];
-  count: number;
-}
-
 const health = (_: Request, res: Response): void => {
   const response: HealthResponse = {
     language: "ts",
@@ -21,6 +16,11 @@ const health = (_: Request, res: Response): void => {
   };
   res.status(200).json(response);
 };
+
+interface TasksResponse {
+  tasks: Task[];
+  count: number;
+}
 
 const tasks = async (_: Request, res: Response): Promise<void> => {
   try {

@@ -1,23 +1,27 @@
 import { addColumn } from "../tasks";
 
 interface AddColumnArgs {
-  name: string;
+  table: string;
+  column: string;
   type: string;
 }
 
 const parseArgs = (): AddColumnArgs => {
   const args = process.argv.slice(2);
   return {
-    name: args[0],
-    type: args[1],
+    table: args[0],
+    column: args[1],
+    type: args[2],
   };
 };
 
 const main = async (): Promise<void> => {
   const args = parseArgs();
-  console.log(args.name, args.type);
-  await addColumn(args.name, args.type);
-  console.log(`column ${args.name} of type ${args.type} added to tasks table.`);
+  console.log(args.column, args.type);
+  await addColumn(args.column, args.type);
+  console.log(
+    `column ${args.column} of type ${args.type} added to tasks table.`,
+  );
 };
 
 if (require.main === module) {
