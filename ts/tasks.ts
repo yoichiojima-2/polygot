@@ -1,16 +1,5 @@
 import { Client } from "pg";
-import * as dotenv from "dotenv";
-
-// setup postgres
-dotenv.config();
-
-const DB_CONFIG = {
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: parseInt(process.env.DB_PORT || "5432", 10),
-};
+import { DB_CONFIG } from "./sql";
 
 // query to postgres
 export interface Task {
@@ -25,6 +14,17 @@ export const getAllTasks = async (): Promise<Task[]> => {
     await client.connect();
     const result = await client.query<Task>("select * from tasks");
     return result.rows;
+  } finally {
+    await client.end();
+  }
+};
+
+export const addColumn = async (name: string, type: string): Promise<void> => {
+  const client = new Client(DB_CONFIG);
+  try {
+    await client.connect();
+    await client.query(`ALTER TABLE tasks ADD COLUMN ${name} ${type}`);
+    console.log(`Column ${name} of type ${type} added to tasks table.`);
   } finally {
     await client.end();
   }
