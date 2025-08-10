@@ -15,7 +15,7 @@ export const getAllTasks = async (): Promise<Task[]> => {
   const client = new Client(DB_CONFIG);
   try {
     await client.connect();
-    const result = await client.query<Task>("select * from tasks");
+    const result = await client.query<Task>(`select * from ${TABLE_NAME}`);
     return result.rows;
   } finally {
     await client.end();
