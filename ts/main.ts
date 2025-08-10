@@ -14,7 +14,7 @@ interface TasksResponse {
   count: number;
 }
 
-const health = (req: Request, res: Response): void => {
+const health = (_: Request, res: Response): void => {
   const response: HealthResponse = {
     language: "ts",
     version: VERSION,
@@ -22,7 +22,7 @@ const health = (req: Request, res: Response): void => {
   res.status(200).json(response);
 };
 
-const tasks = async (req: Request, res: Response): Promise<void> => {
+const tasks = async (_: Request, res: Response): Promise<void> => {
   try {
     const allTasks = await getAllTasks();
     const response: TasksResponse = {
