@@ -1,6 +1,9 @@
 import { Client } from "pg";
 import { DB_CONFIG } from "./sql";
 
+
+const TABLE_NAME = "tasks";
+
 // query to postgres
 export interface Task {
   id: number;
@@ -25,15 +28,14 @@ export const showAllTasks = async (): Promise<void> => {
 };
 
 export const addColumn = async (
-  table: string,
   name: string,
   type: string,
 ): Promise<void> => {
   const client = new Client(DB_CONFIG);
   try {
     await client.connect();
-    await client.query(`ALTER TABLE ${table} ADD COLUMN ${name} ${type}`);
-    console.log(`Column ${name} of type ${type} added to ${table} table.`);
+    await client.query(`ALTER TABLE ${TABLE_NAME} ADD COLUMN ${name} ${type}`);
+    console.log(`Column ${name} of type ${type} added to ${TABLE_NAME} table.`);
   } finally {
     await client.end();
   }
