@@ -4,10 +4,10 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 const DB_CONFIG = {
-  user: process.env.DB_USER || "yo",
-  host: process.env.DB_HOST || "localhost",
-  database: process.env.DB_NAME || "yo",
-  password: process.env.DB_PASSWORD || "",
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
   port: parseInt(process.env.DB_PORT || "5432", 10),
 };
 
