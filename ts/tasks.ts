@@ -1,6 +1,7 @@
 import { Client } from "pg";
 import * as dotenv from "dotenv";
 
+// setup postgres
 dotenv.config();
 
 const DB_CONFIG = {
@@ -11,13 +12,14 @@ const DB_CONFIG = {
   port: parseInt(process.env.DB_PORT || "5432", 10),
 };
 
+// query to postgres
 interface Task {
   id: number;
   title: string;
   due: Date;
 }
 
-const query = async (): Promise<Task[]> => {
+const getAllTasks = async (): Promise<Task[]> => {
   const client = new Client(DB_CONFIG);
   try {
     await client.connect();
@@ -29,8 +31,12 @@ const query = async (): Promise<Task[]> => {
 };
 
 const main = async () => {
-  const tasks = await query();
-  console.log(tasks);
+  try {
+    const tasks = await getAllTasks();
+    console.log(tasks);
+  } catch (error) {
+    console.error("error fetching tasks:", error);
+  }
 };
 
 main();
