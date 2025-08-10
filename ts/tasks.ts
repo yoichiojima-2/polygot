@@ -33,3 +33,15 @@ export const addColumn = async (
     await client.end();
   }
 };
+
+export const setTags = async (id: number, tags: string[]): Promise<void> => {
+  const client = new Client(DB_CONFIG);
+  try {
+    await client.connect();
+    await client.query(`UPDATE tasks SET tags = ${tags} WHERE id = ${id}`);
+  } catch (error) {
+    console.error("error setting tags: ", error);
+  } finally {
+    await client.end();
+  }
+};

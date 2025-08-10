@@ -18,7 +18,7 @@ const parseArgs = (): AddColumnArgs => {
 const main = async (): Promise<void> => {
   const args = parseArgs();
   console.log(args.column, args.type);
-  await addColumn(args.column, args.type);
+  await addColumn(args.table, args.column, args.type);
   console.log(
     `column ${args.column} of type ${args.type} added to tasks table.`,
   );
